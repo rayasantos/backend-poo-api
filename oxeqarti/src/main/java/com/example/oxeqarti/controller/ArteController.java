@@ -5,9 +5,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import com.example.oxeqarti.model.Arte;
-import com.example.oxeqarti.service.*;
+import com.example.oxeqarti.service.ArteService;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/artes")
@@ -19,25 +20,26 @@ public class ArteController {
     @PostMapping
     public ResponseEntity<Arte> salvarArte(@RequestBody Arte arte) {
         Arte arteSalva = arteService.salvarArte(arte);
-        return ResponseEntity.ok(arteSalva); // Retorna o objeto Arte com o código de status 200 OK
+        return ResponseEntity.ok(arteSalva);
     }
 
     @GetMapping("/{titulo}")
-    public ResponseEntity<Arte> encontrarArtePorTitulo(@PathVariable String titulo) {
-        Arte arte = arteService.encontrarArtePorTitulo(titulo);
-        if (arte != null) {
+    public ResponseEntity<?> encontrarArtePorTitulo(@PathVariable String titulo) {
+        Optional<Arte> optionalArte = arteService.encontrarArtePorTitulo(titulo);
+
+        if (optionalArte.isPresent()) {
+            Arte arte = optionalArte.get();
             return ResponseEntity.ok(arte);
         } else {
-            return ResponseEntity.notFound().build(); // Retorna 404 se a arte não for encontrada
+            return ResponseEntity.notFound().build();
         }
     }
 
     @GetMapping
     public ResponseEntity<List<Arte>> encontrarTodasAsArtes() {
         List<Arte> artes = arteService.encontrarTodasAsArtes();
-        return ResponseEntity.ok(artes); // Retorna a lista de artes com o código de status 200 OK
+        return ResponseEntity.ok(artes);
     }
 
     // Métodos adicionais para tratamento de exceções podem ser incluídos aqui
-
 }

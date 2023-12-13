@@ -20,7 +20,7 @@ public class Artista {
     private Long id;
     private String nomeArtista;
 
-    @OneToMany(mappedBy = "artista") // Adicionar mapeamento correto
+    @OneToMany(mappedBy = "artista") 
     private List<Arte> obras = new ArrayList<>();
 
     public Artista(String nomeArtista) {
@@ -29,7 +29,7 @@ public class Artista {
 
     public void criarObra(Arte arte) {
         obras.add(arte);
-        // possivelmente definir 'arte' para apontar de volta para este 'Artista'
+        arte.setArtista(this); 
     }
 
     public void listarObras() {

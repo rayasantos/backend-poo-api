@@ -5,9 +5,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import com.example.oxeqarti.model.Artista;
-import com.example.oxeqarti.service.*;
+import com.example.oxeqarti.service.ArtistaService;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/artistas")
@@ -23,9 +24,11 @@ public class ArtistaController {
     }
 
     @GetMapping("/{nomeArtista}")
-    public ResponseEntity<Artista> encontrarArtistaPorNome(@PathVariable String nomeArtista) {
-        Artista artista = artistaService.encontrarArtistaPorNome(nomeArtista);
-        if (artista != null) {
+    public ResponseEntity<?> encontrarArtistaPorNome(@PathVariable String nomeArtista) {
+        Optional<Artista> optionalArtista = artistaService.encontrarArtistaPorNome(nomeArtista);
+
+        if (optionalArtista.isPresent()) {
+            Artista artista = optionalArtista.get();
             return ResponseEntity.ok(artista);
         } else {
             return ResponseEntity.notFound().build();
